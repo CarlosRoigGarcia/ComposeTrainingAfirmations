@@ -93,8 +93,9 @@ fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
              Icon(imageVector = Icons.Filled.ExpandMore , tint = MaterialTheme.colors.secondary, contentDescription = "A.")
          }
      }
-        if(expanded)
-        AffirmationCardDescription(affirmation = affirmation)
+        if(expanded) {
+            AffirmationCardDescription(affirmation = affirmation)
+        }
     }
 }
 @Composable
