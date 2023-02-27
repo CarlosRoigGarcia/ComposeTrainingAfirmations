@@ -21,7 +21,7 @@ import com.example.affirmations.model.Affirmation
  */
 class Datasource() {
      fun loadAffirmations(): List<Affirmation> {
-        return listOf<Affirmation>(
+        return listOf(
             Affirmation(R.string.affirmation1, R.drawable.image1,R.string.titleDescription,R.string.description),
             Affirmation(R.string.affirmation2, R.drawable.image2,R.string.titleDescription,R.string.description),
             Affirmation(R.string.affirmation3, R.drawable.image3,R.string.titleDescription,R.string.description),

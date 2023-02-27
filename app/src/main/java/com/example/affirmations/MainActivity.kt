@@ -15,30 +15,28 @@
  */
 package com.example.affirmations
 
-import android.content.ClipData.Item
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.example.affirmations.data.Datasource
 import com.example.affirmations.model.Affirmation
 import com.example.affirmations.ui.theme.AffirmationsTheme
-import javax.sql.DataSource
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 
@@ -62,7 +60,7 @@ fun AffirmationApp() {
 }
 
 @Composable
-fun AffirmationList(affirmationList: List<Affirmation>, modifier: Modifier = Modifier) {
+fun AffirmationList(affirmationList: List<Affirmation>) {
     // TODO 3. Wrap affirmation card in a lazy column
     LazyColumn{
         items(affirmationList){affirmation -> AffirmationCard(affirmation)}
@@ -76,26 +74,33 @@ fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
     Card(
         Modifier
             .padding(10.dp)
-            .fillMaxSize()) {
-     Row() {
+            .fillMaxSize().animateContentSize(animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow))) {
 
-         Image(
-             painter = painterResource(id = affirmation.imageResourceId),
-             contentDescription = "ImageRow",
-             modifier = Modifier.padding(top = 10.dp)
-         )
-         Text(text = stringResource(id = affirmation.stringResourceId),
-             modifier = Modifier.padding(top=25.dp,start = 10.dp))
-     }
-     Column(horizontalAlignment = Alignment.End, modifier = modifier.padding(top = 50.dp)) {
+            Row {
 
-         IconButton(onClick = { expanded = !expanded}) {
-             Icon(imageVector = Icons.Filled.ExpandMore , tint = MaterialTheme.colors.secondary, contentDescription = "A.")
-         }
-     }
-        if(expanded) {
-            AffirmationCardDescription(affirmation = affirmation)
-        }
+                Image(
+                    painter = painterResource(id = affirmation.imageResourceId),
+                    contentDescription = "ImageRow",
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+                Text(
+                    text = stringResource(id = affirmation.stringResourceId),
+                    modifier = Modifier.padding(top = 25.dp, start = 10.dp)
+                )
+            }
+            Column(horizontalAlignment = Alignment.End, modifier = modifier.padding(top = 50.dp)) {
+
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                        tint = MaterialTheme.colors.secondary,
+                        contentDescription = "A."
+                    )
+                }
+            }
+            if (expanded) {
+                AffirmationCardDescription(affirmation = affirmation)
+            }
     }
 }
 @Composable
