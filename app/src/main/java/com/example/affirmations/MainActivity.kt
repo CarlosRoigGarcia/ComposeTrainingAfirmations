@@ -16,12 +16,15 @@
 package com.example.affirmations
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,15 +42,52 @@ import com.example.affirmations.model.Affirmation
 import com.example.affirmations.ui.theme.AffirmationsTheme
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 
-
+private const val Tag = "main act"
+private const val TagResume = "resume act"
+private const val TagRestart = "restart act"
+private const val TagPause = "pause act"
+private const val TagDestroy = "destroy act"
+private const val TagStop = "stop act"
+private const val TagStart = "start act"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+                AffirmationApp()
             // TODO 5. Show screen
-            AffirmationApp()
+            Log.d(Tag, "onCreate")
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TagStart, "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TagResume, "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TagPause, "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TagStop, "onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TagDestroy, "onDestroy")
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TagRestart, "onRestart")
     }
 }
 
@@ -55,7 +95,15 @@ class MainActivity : ComponentActivity() {
 fun AffirmationApp() {
     // TODO 4. Apply Theme and affirmation list
     AffirmationsTheme {
-        AffirmationList(affirmationList = Datasource().loadAffirmations())
+        val count = rememberSaveable{
+            mutableStateOf(0)
+        }
+        Column() {
+            TextButton(onClick = { count.value += 1 }) {
+                Text(text = "Pulsado ;)   ${count.value}")
+            }
+            AffirmationList(affirmationList = Datasource().loadAffirmations())
+        }
     }
 }
 
@@ -70,18 +118,28 @@ fun AffirmationList(affirmationList: List<Affirmation>) {
 @Composable
 fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
     // TODO 1. Your card UI
+    val color by animateColorAsState(targetValue = MaterialTheme.colors.surface)
     var expanded by remember{ mutableStateOf(false) }
     Card(
         Modifier
             .padding(10.dp)
-            .fillMaxSize().animateContentSize(animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow))) {
+            .fillMaxSize()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+            .background(
+                color = color
+            )) {
 
             Row {
 
                 Image(
                     painter = painterResource(id = affirmation.imageResourceId),
                     contentDescription = "ImageRow",
-                    modifier = Modifier.padding(top = 10.dp)
+                    modifier = Modifier.padding(top = 10.dp),
                 )
                 Text(
                     text = stringResource(id = affirmation.stringResourceId),
@@ -110,6 +168,7 @@ private  fun AffirmationCardDescription(affirmation: Affirmation){
         Text(text = stringResource(id = affirmation.descriptionResourceId))
     }
 }
+
 @Preview
 @Composable
 private fun AffirmationCardPreview() {
