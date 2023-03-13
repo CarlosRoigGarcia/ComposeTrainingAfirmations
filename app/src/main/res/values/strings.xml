@@ -27,5 +27,27 @@
     <string name="affirmation9">Things will unfold at precisely the right time.</string>
     <string name="affirmation10">I will be present in all the moments that this day brings.</string>
     <string name="titleDescription">Titulo</string>
-    <string name="description">Inserte una descripción aquí.</string>
+    <string name="description">Albion Online es un mmorpg no lineal, en el que escribes tu propia historia sin limitarte a seguir un camino prefijado. Explora un amplio mundo abierto con 5 biomas únicos, todo cuánto hagas tendrá su repercusión en el mundo, con la economía orientada al jugador de Albion, los jugadores crean prácticamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quién eres, cambia de arma y armadura para pasar de caballero a mago, o juega como una mezcla de ambas clases. Aventúrate en el mundo abierto frente a los habitantes y las criaturas de Albion, inicia expediciones o adéntrate en mazmorras en las que encontrarás enemigos aún más difíciles, enfréntate a otros jugadores en encuentros en el mundo abierto, lucha por los territorios o por ciudades enteras en batallas tácticas, relájate en tu isla privada, donde podrás construir un hogar, cultivar cosechas y criar animales, únete a un gremio, todo es mejor cuando se trabaja en grupo. Adéntrate ya en el mundo de Albion y escribe tu propia historia.</string>
+    <string name="email1">ricardo.milos@gmail.com</string>
+    <string name="email2">among.us@gmail.com</string>
+    <string name="email3">alejandro.sans@gmail.com</string>
+    <string name="email4">sisoui.cortabaguete@gmail.com</string>
+    <string name="email5">sans.dance@gmail.com</string>
+    <string name="email6">neco.arc@gmail.com</string>
+    <string name="email7">arc.chaos@gmail.com</string>
+    <string name="email8">goku.legana@gmail.com</string>
+    <string name="email9">andres.fornite@gmail.com</string>
+    <string name="email10">kirby.poyo@gmail.com</string>
+    <string name="phon1">111111111</string>
+    <string name="phon2">222222222</string>
+    <string name="phon3">333333333</string>
+    <string name="phon4">444444444</string>
+    <string name="phon5">555555555</string>
+    <string name="phon6">666666666</string>
+    <string name="phon7">777777777</string>
+    <string name="phon8">888888888</string>
+    <string name="phon9">999999999</string>
+    <string name="phon10">696969695</string>
+
+
 </resources>

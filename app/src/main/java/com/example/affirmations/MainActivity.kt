@@ -31,18 +31,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.affirmations.data.Datasource
 import com.example.affirmations.model.Affirmation
 import com.example.affirmations.ui.theme.AffirmationsTheme
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+
 
 private const val Tag = "main act"
 private const val TagResume = "resume act"
@@ -165,7 +167,13 @@ fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
 private  fun AffirmationCardDescription(affirmation: Affirmation){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)) {
         Text(text = stringResource(id = affirmation.titleDescriptionId))
-        Text(text = stringResource(id = affirmation.descriptionResourceId))
+        Row() {
+            Text(text = stringResource(id = affirmation.descriptionResourceId),overflow = TextOverflow.Ellipsis,
+                maxLines = 2)
+            TextButton(onClick = { /*TODO*/ }) {
+            }
+        }
+
     }
 }
 
@@ -173,7 +181,7 @@ private  fun AffirmationCardDescription(affirmation: Affirmation){
 @Composable
 private fun AffirmationCardPreview() {
     // TODO 2. Preview your card
-AffirmationCard(affirmation =  Affirmation(R.string.affirmation1, R.drawable.image1,R.string.affirmation1,R.string.affirmation2))
+//AffirmationCard(affirmation =  Affirmation(R.string.affirmation1, R.drawable.image1,R.string.affirmation1,R.string.affirmation2))
 }
 
 
