@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.affirmations
+package com.example.affirmations.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -166,14 +166,12 @@ fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
 @Composable
 private  fun AffirmationCardDescription(affirmation: Affirmation){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)) {
-        Text(text = stringResource(id = affirmation.titleDescriptionId))
-        Row() {
+        Text(text = stringResource(id = affirmation.titleDescriptionId),)
             Text(text = stringResource(id = affirmation.descriptionResourceId),overflow = TextOverflow.Ellipsis,
                 maxLines = 2)
             TextButton(onClick = { /*TODO*/ }) {
-            }
+                Text( text = "See more...")
         }
-
     }
 }
 
