@@ -15,6 +15,7 @@
  */
 package com.example.affirmations.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -36,6 +37,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,81 +46,54 @@ import androidx.compose.ui.unit.dp
 import com.example.affirmations.data.Datasource
 import com.example.affirmations.model.Affirmation
 import com.example.affirmations.ui.theme.AffirmationsTheme
+import com.example.affirmations.ui.viewmodel.DetailViewModel
+import com.example.affirmations.ui.viewmodel.MainViewModel
 
 
-private const val Tag = "main act"
+/*private const val Tag = "main act"
 private const val TagResume = "resume act"
 private const val TagRestart = "restart act"
 private const val TagPause = "pause act"
 private const val TagDestroy = "destroy act"
 private const val TagStop = "stop act"
-private const val TagStart = "start act"
+private const val TagStart = "start act"*/
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-                AffirmationApp()
+            val mainUiState by MainViewModel().uiState.collectAsState()
+            AffirmationApp(affirmationList = mainUiState.affirmations, onMoreDetails = {startDetailActivity(it)})
             // TODO 5. Show screen
-            Log.d(Tag, "onCreate")
+           // Log.d(Tag, "onCreate")
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TagStart, "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TagResume, "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TagPause, "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TagStop, "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TagDestroy, "onDestroy")
-    }
-    override fun onRestart() {
-        super.onRestart()
-        Log.d(TagRestart, "onRestart")
+    private fun startDetailActivity(id : Int){
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("Id", id)
+        startActivity(intent)
     }
 }
 
+
 @Composable
-fun AffirmationApp() {
+fun AffirmationApp(affirmationList: List<Affirmation>, onMoreDetails : (id: Int) -> Unit) {
     // TODO 4. Apply Theme and affirmation list
     AffirmationsTheme {
-        val count = rememberSaveable{
-            mutableStateOf(0)
-        }
-        Column() {
-            TextButton(onClick = { count.value += 1 }) {
-                Text(text = "Pulsado ;)   ${count.value}")
-            }
-            AffirmationList(affirmationList = Datasource().loadAffirmations())
+            AffirmationList(affirmationList = affirmationList,onMoreDetails)
         }
     }
-}
 
 @Composable
-fun AffirmationList(affirmationList: List<Affirmation>) {
+fun AffirmationList(affirmationList: List<Affirmation>, onMoreDetails: (id: Int) -> Unit) {
     // TODO 3. Wrap affirmation card in a lazy column
     LazyColumn{
-        items(affirmationList){affirmation -> AffirmationCard(affirmation)}
+        items(affirmationList){affirmation -> AffirmationCard(affirmation, onMoreDetails = onMoreDetails)}
     }
 }
 
 @Composable
-fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
+fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier, onMoreDetails: (id: Int) -> Unit) {
     // TODO 1. Your card UI
     val color by animateColorAsState(targetValue = MaterialTheme.colors.surface)
     var expanded by remember{ mutableStateOf(false) }
@@ -159,17 +134,17 @@ fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier) {
                 }
             }
             if (expanded) {
-                AffirmationCardDescription(affirmation = affirmation)
+                AffirmationCardDescription(affirmation = affirmation, onMoreDetails = onMoreDetails)
             }
     }
 }
 @Composable
-private  fun AffirmationCardDescription(affirmation: Affirmation){
+private  fun AffirmationCardDescription(affirmation: Affirmation,onMoreDetails : (id: Int) -> Unit){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)) {
         Text(text = stringResource(id = affirmation.titleDescriptionId),)
             Text(text = stringResource(id = affirmation.descriptionResourceId),overflow = TextOverflow.Ellipsis,
                 maxLines = 2)
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = {onMoreDetails(affirmation.Id)}) {
                 Text( text = "See more...")
         }
     }
@@ -181,6 +156,36 @@ private fun AffirmationCardPreview() {
     // TODO 2. Preview your card
 //AffirmationCard(affirmation =  Affirmation(R.string.affirmation1, R.drawable.image1,R.string.affirmation1,R.string.affirmation2))
 }
+
+
+/* override fun onStart() {
+     super.onStart()
+     Log.d(TagStart, "onStart")
+ }
+
+ override fun onResume() {
+     super.onResume()
+     Log.d(TagResume, "onResume")
+ }
+
+ override fun onPause() {
+     super.onPause()
+     Log.d(TagPause, "onPause")
+ }
+
+ override fun onStop() {
+     super.onStop()
+     Log.d(TagStop, "onStop")
+ }
+
+ override fun onDestroy() {
+     super.onDestroy()
+     Log.d(TagDestroy, "onDestroy")
+ }
+ override fun onRestart() {
+     super.onRestart()
+     Log.d(TagRestart, "onRestart")
+ }*/
 
 
 
