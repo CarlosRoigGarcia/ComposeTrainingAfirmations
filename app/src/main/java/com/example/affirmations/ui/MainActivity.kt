@@ -15,7 +15,10 @@
  */
 package com.example.affirmations.ui
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -31,8 +34,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -43,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.affirmations.data.Datasource
 import com.example.affirmations.model.Affirmation
 import com.example.affirmations.ui.theme.AffirmationsTheme
@@ -61,8 +67,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val mainUiState by MainViewModel().uiState.collectAsState()
-            AffirmationApp(affirmationList = mainUiState.affirmations, onMoreDetails = {startDetailActivity(it)})
+            val mainViewModel: MainViewModel = viewModel()
+            val mainUiState by mainViewModel.uiState.collectAsState()
+            MainScreen().AffirmationApp(affirmationList = mainUiState.affirmations, onMoreDetails = {startDetailActivity(it)})
             // TODO 5. Show screen
            // Log.d(Tag, "onCreate")
         }
@@ -76,79 +83,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun AffirmationApp(affirmationList: List<Affirmation>, onMoreDetails : (id: Int) -> Unit) {
-    // TODO 4. Apply Theme and affirmation list
-    AffirmationsTheme {
-            AffirmationList(affirmationList = affirmationList,onMoreDetails)
-        }
-    }
 
-@Composable
-fun AffirmationList(affirmationList: List<Affirmation>, onMoreDetails: (id: Int) -> Unit) {
-    // TODO 3. Wrap affirmation card in a lazy column
-    LazyColumn{
-        items(affirmationList){affirmation -> AffirmationCard(affirmation, onMoreDetails = onMoreDetails)}
-    }
-}
-
-@Composable
-fun AffirmationCard(affirmation: Affirmation, modifier: Modifier = Modifier, onMoreDetails: (id: Int) -> Unit) {
-    // TODO 1. Your card UI
-    val color by animateColorAsState(targetValue = MaterialTheme.colors.surface)
-    var expanded by remember{ mutableStateOf(false) }
-    Card(
-        Modifier
-            .padding(10.dp)
-            .fillMaxSize()
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            )
-            .background(
-                color = color
-            )) {
-
-            Row {
-
-                Image(
-                    painter = painterResource(id = affirmation.imageResourceId),
-                    contentDescription = "ImageRow",
-                    modifier = Modifier.padding(top = 10.dp),
-                )
-                Text(
-                    text = stringResource(id = affirmation.stringResourceId),
-                    modifier = Modifier.padding(top = 25.dp, start = 10.dp)
-                )
-            }
-            Column(horizontalAlignment = Alignment.End, modifier = modifier.padding(top = 50.dp)) {
-
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(
-                        imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                        tint = MaterialTheme.colors.secondary,
-                        contentDescription = "A."
-                    )
-                }
-            }
-            if (expanded) {
-                AffirmationCardDescription(affirmation = affirmation, onMoreDetails = onMoreDetails)
-            }
-    }
-}
-@Composable
-private  fun AffirmationCardDescription(affirmation: Affirmation,onMoreDetails : (id: Int) -> Unit){
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)) {
-        Text(text = stringResource(id = affirmation.titleDescriptionId),)
-            Text(text = stringResource(id = affirmation.descriptionResourceId),overflow = TextOverflow.Ellipsis,
-                maxLines = 2)
-            TextButton(onClick = {onMoreDetails(affirmation.Id)}) {
-                Text( text = "See more...")
-        }
-    }
-}
 
 @Preview
 @Composable
@@ -186,7 +121,3 @@ private fun AffirmationCardPreview() {
      super.onRestart()
      Log.d(TagRestart, "onRestart")
  }*/
-
-
-
-
